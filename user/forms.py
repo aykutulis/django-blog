@@ -20,3 +20,9 @@ class RegisterForm(forms.Form):
             "username": cleaned_data.get('username'),
             "password": cleaned_data.get('password'),
         }
+
+
+class LoginForm(forms.Form):
+    username = forms.CharField(max_length=50, min_length=3, label='Username')
+    password = forms.CharField(
+        max_length=20, min_length=3, label='Password', widget=forms.PasswordInput)

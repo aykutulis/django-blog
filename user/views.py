@@ -1,34 +1,52 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.models import User
-from django.contrib.auth import login
+from django.contrib.auth import login, authenticate
 from django.contrib import messages
 
-from .forms import RegisterForm
+from .forms import RegisterForm, LoginForm
 
 
 def register_user(request):
 
     form = RegisterForm(request.POST or None)
+    context = {
+        "form": form
+    }
 
-    if request.method == 'POST':
-        if form.is_valid():
-            username = form.cleaned_data.get('username')
-            password = form.cleaned_data.get('password')
+    if form.is_valid():
+        username = form.cleaned_data.get('username')
+        password = form.cleaned_data.get('password')
 
-            newUser = User.objects.create_user(
-                username=username, password=password)
+        newUser = User.objects.create_user(
+            username=username, password=password)
 
-            login(request, newUser)
+        login(request, newUser)
 
-            messages.success(request, 'Successfully registered.')
-            return redirect('index')
-        return render(request, 'register.html', {'form': form})
-    else:
-        return render(request, 'register.html', {'form': form})
+        messages.success(request, 'Successfully registered.')
+        return redirect('index')
+    return render(request, 'register.html', context)
 
 
 def login_user(request):
-    return render(request, 'login.html')
+    form = LoginForm(request.POST or None)
+    context = {
+        "form": form
+    }
+
+    if form.is_valid():
+        username = form.cleaned_data.get('username')
+        password = form.cleaned_data.get('password')
+
+        user = authenticate(username=username, password=password)
+
+        if user is None:
+            messages.info(request, 'User does not exist.')
+            return render(request, 'login.html', context)
+
+        login(request, user)
+        messages.success(request, 'Successfully logged in.')
+        return redirect('index')
+    return render(request, 'login.html', context)
 
 
 def logout_user(request):
