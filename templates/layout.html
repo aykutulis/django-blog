@@ -18,7 +18,7 @@
     <title>Blog</title>
   </head>
   <body>
-    {% include "includes/navbar.html" %}
+    <div class="container-xl">{% include "includes/navbar.html" %}</div>
     <div class="container-xl mt-5">
       {% if messages %} {% for message in messages %}
       <div class="alert alert-{{ message.tags }}">{{ message }}</div>
