@@ -1,4 +1,5 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
+from django.contrib import messages
 
 from .forms import ArticleForm
 
@@ -21,5 +22,13 @@ def add_article(request):
     context = {
         "form": form
     }
+
+    if form.is_valid():
+        article = form.save(commit=False)
+        article.author = request.user
+        article.save()
+
+        messages.success(request, 'Successfully added article.')
+        return redirect('article:dashboard')
 
     return render(request, 'add-article.html', context)
