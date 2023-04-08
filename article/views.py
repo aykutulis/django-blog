@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect
 from django.contrib import messages
 
+from .models import Article
 from .forms import ArticleForm
 
 
@@ -13,7 +14,8 @@ def about(request):
 
 
 def dashboard(request):
-    return render(request, 'dashboard.html')
+    articles = Article.objects.filter(author=request.user)
+    return render(request, 'dashboard.html', {'articles': articles})
 
 
 def add_article(request):
