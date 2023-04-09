@@ -39,3 +39,19 @@ def add_article(request):
 def detail(request, id):
     article = get_object_or_404(Article, id=id)
     return render(request, 'detail.html', {'article': article})
+
+
+def update_article(request, id):
+    article = get_object_or_404(Article, id=id)
+    form = ArticleForm(request.POST or None,
+                       request.FILES or None, instance=article)
+
+    if form.is_valid():
+        article = form.save(commit=False)
+        article.author = request.user
+        article.save()
+
+        messages.success(request, 'Successfully updated article.')
+        return redirect('article:dashboard')
+
+    return render(request, 'update-article.html', {'form': form})
