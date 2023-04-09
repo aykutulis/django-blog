@@ -7,7 +7,7 @@
       </div>
       <div class="card-body">
         <form method="post">
-          {% csrf_token %} {{form|crispy}}
+          {% csrf_token %} {{ form.media }} {{form|crispy}}
           <div class="d-grid gap-2">
             <button type="submit" class="btn btn-primary">Add</button>
           </div>
