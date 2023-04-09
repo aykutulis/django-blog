@@ -34,3 +34,8 @@ def add_article(request):
         return redirect('article:dashboard')
 
     return render(request, 'add-article.html', context)
+
+
+def detail(request, id):
+    article = Article.objects.filter(id=id).first()
+    return render(request, 'detail.html', {'article': article})
