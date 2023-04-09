@@ -66,3 +66,12 @@ def delete_article(request, id):
     article.delete()
     messages.success(request, 'Successfully deleted article.')
     return redirect('article:dashboard')
+
+
+def articles(request):
+    keyword = request.GET.get('keyword')
+    if keyword:
+        articles = Article.objects.filter(title__contains=keyword)
+        return render(request, 'articles.html', {'articles': articles})
+    articles = Article.objects.all()
+    return render(request, 'articles.html', {'articles': articles})
