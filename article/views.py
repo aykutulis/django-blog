@@ -55,3 +55,10 @@ def update_article(request, id):
         return redirect('article:dashboard')
 
     return render(request, 'update-article.html', {'form': form})
+
+
+def delete_article(request, id):
+    article = get_object_or_404(Article, id=id)
+    article.delete()
+    messages.success(request, 'Successfully deleted article.')
+    return redirect('article:dashboard')
