@@ -5,8 +5,12 @@
     <h3>{{ article.title }}</h3>
     <hr />
     <p class="text-muted">Author: {{ article.author }} | Date: {{ article.created_date }}</p>
-    <img src="https://picsum.photos/800/400" alt="Blog Resmi" class="img-fluid my-4" />
-    <p>{{ article.content }}</p>
+
+    {% if article.image %}
+    <img src="{{ article.image.url }}" alt="{{ article.title }}" class="img-fluid my-4" />
+    {% endif %}
+
+    <p>{{ article.content|safe }}</p>
   </div>
 
   {% endblock %}
