@@ -12,6 +12,9 @@ class Article(models.Model):
     def __str__(self):
         return self.title
 
+    class Meta:
+        ordering = ['-created_date']
+
 
 class Comment(models.Model):
     article = models.ForeignKey(
@@ -22,3 +25,6 @@ class Comment(models.Model):
 
     def __str__(self):
         return self.comment_content
+
+    class Meta:
+        ordering = ['-comment_date']

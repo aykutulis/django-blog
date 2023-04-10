@@ -1,8 +1,9 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
+from django.urls import reverse
 from django.contrib import messages
 
-from .models import Article
+from .models import Article, Comment
 from .forms import ArticleForm
 
 
@@ -75,3 +76,24 @@ def articles(request):
         return render(request, 'articles.html', {'articles': articles, 'keyword': keyword})
     articles = Article.objects.all()
     return render(request, 'articles.html', {'articles': articles})
+
+
+@login_required(login_url='user:login')
+def add_comment(request, id):
+    article = get_object_or_404(Article, id=id)
+
+    if request.method == 'POST':
+        comment_content = request.POST.get('comment')
+
+        if not comment_content:
+            messages.warning(request, 'Comment cannot be empty.')
+            return redirect(reverse('article:detail', kwargs={'id': id}))
+
+        comment_author = request.user
+
+        new_comment = Comment(comment_author=comment_author,
+                              comment_content=comment_content)
+        new_comment.article = article
+        new_comment.save()
+
+    return redirect(reverse('article:detail', kwargs={'id': id}))
